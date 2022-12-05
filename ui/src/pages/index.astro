@@ -2,12 +2,15 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const messagesFetch = await fetch('http://web:7800/api/message');
-const allMessages = await messagesFetch.json();
+let allMessages = await messagesFetch.json();
+
+// at most 20 messages are shown
+allMessages = allMessages.slice(0, 20);
 ---
 
 <BaseLayout pageTitle="Third Course Project">
 	<h2>Messaging Application</h2>
-    <h3>All Messages</h3>
+    <h3>Most Recent Messages (showing at most 20 messages)</h3>
     <ul>
         {allMessages.map(message => <li><a href={`/replies/${message.id}`}>{message.content}</a> Created at: {message.created_at}</li>)}
     </ul>

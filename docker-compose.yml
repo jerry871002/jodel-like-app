@@ -17,7 +17,7 @@ services:
     image: ui
     restart: "no"
     volumes:
-      - ./ui/:/app
+      - ./ui/src/:/app/src
     ports:
       - 7778:7778
     depends_on:

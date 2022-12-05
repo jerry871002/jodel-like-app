@@ -17,13 +17,13 @@ export const connectDB = async () => {
 }
 
 export const queryAllMessages = async (client) => {
-  const result = await client.queryObject("SELECT * FROM messages;");
+  const result = await client.queryObject("SELECT * FROM messages WHERE top_level=TRUE ORDER BY created_at DESC;");
   return result.rows;
 }
 
 export const queryMessageById = async (client, messageid) => {
   const result = await client.queryObject(
-    "SELECT * FROM messages WHERE id=$messageid;",
+    "SELECT * FROM messages WHERE id=$messageid AND top_level=TRUE ORDER BY created_at DESC;",
     {
       messageid: messageid
     }
