@@ -1,11 +1,17 @@
-FROM denoland/deno:alpine-1.26.2
-
-EXPOSE 7778
+FROM node:lts-alpine3.16
 
 WORKDIR /app
 
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY package.json /app/package.json
+COPY tsconfig.json /app/tsconfig.json
+
+# install node dependencies
+RUN echo "npm install in progress..." && npm install
+
 COPY . .
 
-RUN deno cache deps.js
+EXPOSE 7778
 
-CMD [ "run", "--watch", "--allow-net", "--allow-read", "--allow-env", "--no-check", "app.js" ]
+CMD [ "astro", "dev", "--host" ]

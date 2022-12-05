@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const messagesFetch = await fetch('http://web:7800/api/message');
+    const allMessages = await messagesFetch.json();
+
+    return allMessages.map(message => {
+        const messageid = message.id;
+
+        return {
+            params: { messageid },
+            props: { content: message.content }
+        }
+    });
+}
+
+const { messageid } = Astro.params;
+const { content } = Astro.props;
+
+const repliesFetch = await fetch(`http://web:7800/api/replies?messageid=${messageid}`);
+const replies = await repliesFetch.json();
+---
+
+<BaseLayout pageTitle="Replies">
+    <h2>Original Message:</h2>
+    {content}
+    <h2>Replies:</h2>
+    <ul>
+        {replies.map(reply => <li>{reply.content}</li>)}
+    </ul>
+    <h2>Add new reply here:</h2>
+    <input id="messageid" type="hidden" value={messageid}>
+    <textarea id="content" cols="50" rows="2"></textarea> <br>
+    <button id="submitButton">Reply</button>
+</BaseLayout>
+
+<script>
+    document.querySelector('#submitButton').addEventListener('click', () => {
+        const userid = window.localStorage.getItem('userid');
+        const content = document.querySelector('#content').value;
+        const messageid = document.querySelector('#messageid').value;
+
+        const data = {
+            userid: userid,
+            content: content,
+            top_level: false,
+            reply_to: messageid
+        };
+        console.log(data);
+        fetch('/api/message', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+
+        window.location.reload();
+    });
+</script>
