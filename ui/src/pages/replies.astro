@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout pageTitle="Replies">
+    <h2>Original Message:</h2>
+    <p id="original"></p>
+    <h2>Replies:</h2>
+    <ul id="replies"></ul>
+    <h2>Add new reply here:</h2>
+    <textarea id="content" cols="50" rows="2"></textarea> <br>
+    <button id="submitButton">Reply</button>
+</BaseLayout>
+
+<script>
+    const messageid = new URL(window.location.href).searchParams.get('messageid');
+    fetch(`/api/message?messageid=${messageid}`)
+        .then(response => response.json())
+        .then(message => {
+            document.querySelector('#original').innerHTML = message[0].content;
+        });
+    fetch(`/api/replies?messageid=${messageid}`)
+        .then(response => response.json())
+        .then(replies => {
+            let listItems = '';
+            replies.forEach(reply => {
+                listItems += `<li>${reply.content}</li>`;
+            });
+            document.querySelector('#replies').innerHTML = listItems;
+        });
+
+    document.querySelector('#submitButton').addEventListener('click', () => {
+        const userid = window.localStorage.getItem('userid');
+        const content = document.querySelector('#content').value;
+
+        const data = {
+            userid: userid,
+            content: content,
+            top_level: false,
+            reply_to: messageid
+        };
+        console.log(data);
+        fetch('/api/message', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+
+        window.location.reload();
+    });
+</script>

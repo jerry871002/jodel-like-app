@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const messagesFetch = await fetch('http://web:7800/api/message');
+const messagesFetch = await fetch('http://api-app-service:7777/message');
 let allMessages = await messagesFetch.json();
 
 // at most 20 messages are shown
@@ -12,7 +12,7 @@ allMessages = allMessages.slice(0, 20);
 	<h2>Messaging Application</h2>
     <h3>Most Recent Messages (showing at most 20 messages)</h3>
     <ul>
-        {allMessages.map(message => <li><a href={`/replies/${message.id}`}>{message.content}</a> Created at: {message.created_at}</li>)}
+        {allMessages.map(message => <li><a href={`/replies?messageid=${message.id}`}>{message.content}</a> Created at: {message.created_at}</li>)}
     </ul>
     <h3>Add new message here:</h3>
     <textarea id="content" cols="50" rows="2"></textarea> <br>
@@ -22,7 +22,7 @@ allMessages = allMessages.slice(0, 20);
 <script>
     if (window.localStorage.getItem('userid') === null) {
         console.log('userid not set yet, generating');
-        const userid = crypto.randomUUID();
+        const userid = parseInt(10e10 * Math.random()).toString(16).padStart(10, '0');
         window.localStorage.setItem('userid', userid);
     }
 
