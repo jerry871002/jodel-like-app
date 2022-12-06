@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-app-deployment
+  template:
+    metadata:
+      labels:
+        app: api-app-deployment
+    spec:
+      containers:
+        - name: api-app
+          image: api-app:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 7777
+          env:
+            - name: PGPASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-cluster-app
+                  key: pgpass
+                  # stating that the secret "database-cluster-app" must exist
+                  optional: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-app-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 7777
+      targetPort: 7777
+      protocol: TCP
+  selector:
+    app: api-app-deployment
