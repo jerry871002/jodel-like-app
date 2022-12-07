@@ -26,13 +26,14 @@ services:
       - 7778:7778
     depends_on:
       - api-app-service
+      - database
     env_file:
       - project.env
 
   api-app-service:
     build: api
     image: api
-    restart: "no"
+    restart: always
     volumes:
       - ./api/:/app
     ports:
@@ -40,10 +41,6 @@ services:
     depends_on:
       - database
       - flyway
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
     env_file:
       - project.env
 

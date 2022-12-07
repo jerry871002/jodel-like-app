@@ -1,5 +1,4 @@
 import http from 'k6/http';
-import { sleep } from 'k6';
 import { uuidv4 } from 'https://jslib.k6.io/k6-utils/1.4.0/index.js';
 
 export const options = {
@@ -20,6 +19,7 @@ export const options = {
 export default function () {
   const userid = uuidv4();
 
+  // generating some random messages
   const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let content = '';
   for (let i = 0; i < 5; i++) {

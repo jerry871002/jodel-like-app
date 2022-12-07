@@ -1,7 +1,13 @@
 import { serve } from "./deps.js";
 import { connectDB, insertMessage, queryAllMessages, queryMessageById, queryAllReplies } from "./db.js";
 
-const dbClient = await connectDB();
+let dbClient;
+try {
+  dbClient = await connectDB();
+} catch (error) {
+  console.error(error);
+  Deno.exit(1);
+}
 
 const httpResponse = (object, status) => {
   return new Response(JSON.stringify(object), {

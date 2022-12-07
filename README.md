@@ -8,7 +8,7 @@ The prerequisite of this setup is only **Docker** (https://docs.docker.com/get-d
 
 Run `docker-compose up --build` to build and start the services.
 
-After the starting process, you can visit the main page http://127.0.0.1:7800/. However, usually at the first start, `ui` service will throw error since `api` service isn't ready yet, if this happens, just restart the application using `docker-compose restart`.
+After the starting process, you can visit the main page http://127.0.0.1:7800/. However, sometimes at the first start `ui` service will throw error since `api` service isn't ready yet, if this happens, just restart the application using `docker-compose restart`.
 
 ### `minikube` setup
 
@@ -65,6 +65,7 @@ The setup steps are as follow, please make sure you are at the root folder of th
     minikube tunnel
     ```
 12. (Uncertain) If you are using a mac, you need to append `127.0.0.1 dab-project.io` to `/etc/hosts` file, which reqires root access to write. If you are using other operating systems, maybe you can directly start using the application by visiting http://dab-project.io/.
+13. Visit http://dab-project.io/ to start using the application!
 
 ## `k6` Performance Test
 
@@ -76,3 +77,5 @@ The prerequisite of this section is k6 (https://k6.io/docs/get-started/installat
 k6 run test_main_page.js
 k6 run test_new_message.js
 ```
+
+If you want to test under the `docker-compose` setting, change `dab-project.io` in the script into `127.0.0.1:7800`.

@@ -13,12 +13,12 @@ To run the application, please refer to `README.md`.
 
 ### Performance Test Results
 
-To run the `k6` performance tests, please also refer to `README.md`.
+To run the `k6` performance tests, please also refer to `README.md`. The following results come from the `minikube` setting.
 
 | Endpoint | Avg requests per sec | Median | 95th percentile | 99th percentile |
 |----------------|---------------------:|-------:|----------------:|----------------:|
-| Main Page | 112.441923 | 201.26ms | 593.93ms | 883.81ms |
 | Post Message | 567.43864 | 89.49ms | 119.83ms | 165.87ms |
+| Main Page | 112.441923 | 201.26ms | 593.93ms | 883.81ms |
 
 ## Reflection
 
@@ -26,4 +26,4 @@ The Lighthouse performance of the system is quite good since there are no fancy 
 
 ## Suggestions
 
-The code `const messagesFetch = await fetch('http://api-app-service:7777/message');` in `index.astro` exposes the internal configuration of the services, which shouldn't be seen by the user. However, I haven't find a way to access the ingress internally to avoid this problem. Also, as mentioned in the previous section, maybe I could cache the database query result to speed up the rendering of the main page. 
+The code `const messagesFetch = await fetch('http://api-app-service:7777/message');` in `index.astro` exposes the internal configuration of the services, which shouldn't be seen by the user. However, I haven't find a way to access the ingress internally to avoid this problem. Also, as mentioned in the previous section, maybe I could cache the database query results to speed up the rendering of the main page when there are a lot of data in the database. 
