@@ -1,23 +1,30 @@
 import { Client } from './deps.js';
 
 export const connectDB = async () => {
-  const env = Deno.env.toObject();
+  const PGPASS = Deno.env.get("PGPASS").trim();
   console.log("Connecting to database...")
-  console.log("env:", env);
+  console.log("PGPASS:", PGPASS);
+
+  const PGPASS_PARTS = PGPASS.split(":");
+  const host = PGPASS_PARTS[0];
+  const port = PGPASS_PARTS[1];
+  const database = PGPASS_PARTS[2];
+  const username = PGPASS_PARTS[3];
+  const password = PGPASS_PARTS[4];
 
   const client = new Client({
-    hostname: env.PGHOST,
-    database: env.PGDATABASE,
-    user: env.PGUSER,
-    password: env.PGPASSWORD,
-    port: env.PGPORT,
+    hostname: host,
+    database: database,
+    user: username,
+    password: password,
+    port: port,
   });
   await client.connect();
   return client;
 }
 
 export const queryAllMessages = async (client) => {
-  const result = await client.queryObject("SELECT * FROM messages WHERE top_level=TRUE ORDER BY created_at DESC;");
+  const result = await client.queryObject("SELECT * FROM messages WHERE top_level=TRUE ORDER BY created_at DESC LIMIT 20;");
   return result.rows;
 }
 
@@ -33,7 +40,7 @@ export const queryMessageById = async (client, messageid) => {
 
 export const queryAllReplies = async (client, messageid) => {
   const result = await client.queryObject(
-    "SELECT * FROM messages WHERE reply_to=$messageid;",
+    "SELECT * FROM messages WHERE reply_to=$messageid ORDER BY created_at DESC;",
     {
       messageid: messageid
     }

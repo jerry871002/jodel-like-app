@@ -9,7 +9,11 @@ services:
       - 7800:7800
     depends_on:
       - ui
-      - api
+      - api-app-service
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
     command: [nginx-debug, '-g', 'daemon off;']
 
   ui:
@@ -21,11 +25,11 @@ services:
     ports:
       - 7778:7778
     depends_on:
-      - api
+      - api-app-service
     env_file:
       - project.env
 
-  api:
+  api-app-service:
     build: api
     image: api
     restart: "no"
@@ -36,6 +40,10 @@ services:
     depends_on:
       - database
       - flyway
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
     env_file:
       - project.env
 

@@ -10,6 +10,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <h2>Add new reply here:</h2>
     <textarea id="content" cols="50" rows="2"></textarea> <br>
     <button id="submitButton">Reply</button>
+    <a href="/">Back to Home</a>
 </BaseLayout>
 
 <script>
@@ -24,7 +25,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         .then(replies => {
             let listItems = '';
             replies.forEach(reply => {
-                listItems += `<li>${reply.content}</li>`;
+                listItems += `<li>${reply.content}  Created at: ${reply.created_at}</li>`;
             });
             document.querySelector('#replies').innerHTML = listItems;
         });
