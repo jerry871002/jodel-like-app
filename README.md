@@ -1,4 +1,6 @@
-# DAB Project 3
+# CS-E4770 Project 3: Jodel-like Messaging Application
+
+This is the third project of CS-E4770 Designing and Building Scalable Web Applications at Aalto University. This project implements a Kubernetes-based Jodel-like messaging application with auto-scaling capability.
 
 ## Get Started
 
